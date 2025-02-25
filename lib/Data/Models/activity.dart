@@ -3,84 +3,84 @@ import '../../Domain/Entities/activity_entities.dart';
 class ActivityModel extends ActivityEntity {
 
   ActivityModel({
-    int? id,
+    String? id,
     String? title,
     String? projectId,
     String? projectName,
     String? startDate,
     String? endDate,
     String? estimateHours,
-    int? assignor,
+    // int? assignor,
    /* String? assignorId,*/
     String? description,
-    String? comment,
+    // String? comment,
     String? priority,
     String? status,
     DateTime? updatedAt,
-    List<AssignedUserModel>? assignedUsers,
+    // List<AssignedUserModel>? assignedUsers,
   }) : super(
-    id: id,
+    // id: id,
     title: title,
     projectId: projectId,
     projectName: projectName,
     startDate: startDate,
     endDate: endDate,
     estimateHours: estimateHours,
-    assignor: assignor,
+    // assignor: assignor,
     description: description,
-    comment: comment,
+    // comment: comment,
     priority: priority,
     status: status,
     updatedAt: updatedAt,
-    assignedUsers: assignedUsers?.map((user) => user.toEntity()).toList(),
+    // assignedUsers: assignedUsers?.map((user) => user.toEntity()).toList(),
   );
 
   factory ActivityModel.fromEntity(ActivityEntity entity) {
     return ActivityModel(
-      id: entity.id,
+      // id: entity.id,
       title: entity.title,
       projectId: entity.projectId,
       projectName: entity.projectName,
       startDate: entity.startDate,
       endDate: entity.endDate,
       estimateHours: entity.estimateHours,
-      assignor: entity.assignor,
+      // assignor: entity.assignor,
    /*   assignorId: entity.assignor != null ? entity.assignor.toString() : null,  */// Assuming assignorId as a String representation of assignor
       description: entity.description,
-      comment: entity.comment,
+      // comment: entity.comment,
       priority: entity.priority,
       status: entity.status,
       updatedAt: entity.updatedAt,
-      assignedUsers: entity.assignedUsers
+   /*   assignedUsers: entity.assignedUsers
           ?.map((assignedUserEntity) => AssignedUserModel.fromEntity(assignedUserEntity))
-          .toList(),
+          .toList(),*/
     );
   }
 
   factory ActivityModel.fromJson(Map<String, dynamic> json) {
     return ActivityModel(
-      id: json['id'] ?? 0,
+      id: json['id'] ?? '',
       title: json['title'] ?? '',
       projectId: json['project'] ?? '',
       projectName: json['project_name'] ?? '',
       startDate: json['start_date'] ?? '',
       endDate: json['end_date'] ?? '',
       estimateHours: json['estimate_hours'] ?? '',
-      assignor: json['assignor'] ?? 0,
+      // assignor: json['assignor'] ?? 0,
       description: json['description'] ?? '',
-      comment: json['comment'] ?? '',
+      // comment: json['comment'] ?? '',
       priority: json['priority'] ?? '',
       status: json['status'] ?? '',
       updatedAt: DateTime.parse(json['updated_at']) ?? DateTime(1970),
-      assignedUsers: (json['assigned_users'] as List?)
+   /*   assignedUsers: (json['assigned_users'] as List?)
           ?.map((user) => AssignedUserModel.fromJson(user))
-          .toList(),
+          .toList(),*/
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      // 'id': id,
       'title': title,
       'project': projectId,
       'project_name': projectName,
@@ -99,7 +99,7 @@ class ActivityModel extends ActivityEntity {
 
   ActivityEntity toEntity() {
     return ActivityEntity(
-      id: id,
+      // id: id,
       title: title,
       projectId: projectId,
       projectName: projectName,

@@ -1,4 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../../../Data/Sources/Firebase/firebase_activity_form_remote_source.dart';
+import '../../../Data/Sources/Firebase/firebase_activity_remote_source.dart';
+import '../../../Data/Sources/Firebase/firebase_dashboard_remote_source.dart';
+import '../../../Data/Sources/Firebase/firebase_profile_remote_source.dart';
+import '../../../Data/Sources/Firebase/firebase_project_remote_source.dart';
 import '../../../Data/Sources/Firebase/firebase_sign_in_remote_source.dart';
+import '../../../Data/Sources/Firebase/firebase_sign_out_remote_source.dart';
 import '../../../Data/Sources/local_data_sources.dart';
 import '../../../Data/Repositories/activity_repositories_impl.dart';
 import '../../../Domain/Usecases/activity_usecases.dart';
@@ -26,16 +34,16 @@ import '../../../Data/Repositories/sign_in_repositories_impl.dart';
 import '../../../Data/Repositories/signout_repositories_impl.dart';
 import '../../../Data/Repositories/voucher_form_repositories_impl.dart';
 import '../../../Data/Repositories/voucher_repositories_impl.dart';
-import '../../../Data/Sources/activity_form_remote_source.dart';
+// import '../../../Data/Sources/activity_form_remote_source.dart';
 import '../../../Data/Sources/attendance_form_remote_source.dart';
 import '../../../Data/Sources/attendance_remote_source.dart';
-import '../../../Data/Sources/dashboard_remote_source.dart';
+// import '../../../Data/Sources/dashboard_remote_source.dart';
 import '../../../Data/Sources/employee_remote_source.dart';
 import '../../../Data/Sources/head_of_accounts_remote_source.dart';
 import '../../../Data/Sources/leave_form_remote_source.dart';
 import '../../../Data/Sources/leave_remote_source.dart';
-import '../../../Data/Sources/profile_remote_source.dart';
-import '../../../Data/Sources/project_remote_source.dart';
+// import '../../../Data/Sources/profile_remote_source.dart';
+// import '../../../Data/Sources/project_remote_source.dart';
 import '../../../Data/Sources/voucher_form_remote_source.dart';
 import '../../../Data/Sources/voucher_remote_source.dart';
 import '../../../Domain/Repositories/activity_form_repositories.dart';
@@ -102,6 +110,11 @@ Future<void> init() async {
         () => AuthenticationRemoteDataSource(),
   );
 
+
+  getIt.registerLazySingleton<DashboardRemoteSource>(
+        () => DashboardRemoteSourceImpl(firestore: FirebaseFirestore.instance),
+  );
+
   //Activity Dashboard
   // **4. Register DataSources**
   getIt.registerLazySingleton<LocalDataSource>(() => LocalDataSource(
@@ -109,9 +122,17 @@ Future<void> init() async {
   getIt.registerLazySingleton<RemoteDataSource>(
           () => RemoteDataSource()); // Remote data source instance.
 
+  getIt.registerLazySingleton<FirebaseFirestore>(
+        () => FirebaseFirestore.instance,
+  );
+
+  getIt.registerLazySingleton<ActivityRemoteDataSource>(
+        () => ActivityRemoteDataSource(firestore: getIt<FirebaseFirestore>()),
+  );
+
   // **5. Register Repositories**
   getIt.registerLazySingleton<ActivityRepository>(() => ActivityRepositoryImpl(
-    getIt<RemoteDataSource>(), // Inject remote data source.
+    getIt<ActivityRemoteDataSource>(), // Inject remote data source.
     getIt<LocalDataSource>(), // Inject local data source.
   ));
 
@@ -147,7 +168,7 @@ Future<void> init() async {
 
   // **12. Register Remote Sources**
   getIt.registerLazySingleton(() => ActivityFormRemoteDataSource(
-      getIt())); // Activity remote data source depends on HTTP client.
+      firestore: FirebaseFirestore.instance)); // Activity remote data source depends on HTTP client.
 
   final client = http.Client();
 
@@ -204,8 +225,11 @@ Future<void> init() async {
       submitVoucherFormUseCase: getIt<SubmitVoucherFormUseCase>()));
 
   //Profile
+/*  getIt.registerLazySingleton<ProfileRemoteSource>(
+          () => ProfileRemoteSourceImpl(client: getIt())); */
+
   getIt.registerLazySingleton<ProfileRemoteSource>(
-          () => ProfileRemoteSourceImpl(client: getIt()));
+          () => ProfileRemoteSourceImpl(firestore: FirebaseFirestore.instance));
   getIt.registerLazySingleton<ProfileRepository>(
           () => ProfileRepositoryImpl(remoteSource: getIt()));
   getIt.registerLazySingleton<GetProfileUseCase>(
@@ -215,7 +239,13 @@ Future<void> init() async {
 
   //Logout
   // Register SignOutRepository
-  getIt.registerLazySingleton<SignOutRepository>(() => SignOutRepositoryImpl());
+  getIt.registerLazySingleton<SignOutRemoteDataSource>(
+        () => SignOutRemoteDataSource(),
+  );
+
+  getIt.registerLazySingleton<SignOutRepository>(
+        () => SignOutRepositoryImpl(remoteDataSource: getIt<SignOutRemoteDataSource>()),
+  );
 
   // Register SignOutUseCase
   getIt.registerLazySingleton<SignOutUseCase>(
@@ -246,7 +276,7 @@ Future<void> init() async {
 
   //Project
   getIt.registerLazySingleton<ProjectRemoteDataSource>(
-          () => ProjectRemoteDataSourceImpl(client: getIt()));
+          () => ProjectRemoteDataSourceImpl(firestore: FirebaseFirestore.instance));
   getIt.registerLazySingleton<ProjectRepository>(
           () => ProjectRepositoryImpl(remoteDataSource: getIt()));
   getIt.registerLazySingleton<GetProjectsUseCase>(
@@ -308,9 +338,9 @@ Future<void> init() async {
   getIt.registerFactory(() => VoucherBloc(getVouchers: getIt()));
 
   //Dashboard
-  getIt.registerLazySingleton<DashboardRemoteSource>(
+/*  getIt.registerLazySingleton<DashboardRemoteSource>(
         () => DashboardRemoteSourceImpl(client: getIt()),
-  );
+  );*/
 
   // Repositories
   getIt.registerLazySingleton<DashboardRepository>(

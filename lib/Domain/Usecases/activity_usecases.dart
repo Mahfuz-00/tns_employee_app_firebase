@@ -36,7 +36,7 @@ class ActivityUseCase {
 // Ensure non-null values for each task field (you can replace `null` with default values if necessary)
       final cleanedTasks = allTasks.map((task) {
         return ActivityEntity(
-          id: task.id,
+          // id: task.id,
           title: task.title ?? 'Untitled Task',  // Replace null title with a default string
           projectId: task.projectId,
           startDate: task.startDate,

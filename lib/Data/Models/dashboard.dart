@@ -127,9 +127,12 @@ class ActivityModel extends ActivityEntity {
       assignorName: json['assignor_name'] as String?,
       assignorImage: json['assignor_image'] as String?,
       projectName: json['project_name'] as String?,
-      assignedUsers: (json['assigned_users'] as List?)
+   /*   assignedUsers: (json['assigned_users'] as List?)
           ?.map((user) => AssignedUserModel.fromJson(user))
-          .toList(),
+          .toList(),*/
+      assignedUsers: json['assigned_users'] != null
+          ? [AssignedUserModel.fromJson(json['assigned_users'])]
+          : [],
     );
   }
 

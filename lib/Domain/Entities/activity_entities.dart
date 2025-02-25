@@ -1,5 +1,5 @@
 class ActivityEntity {
-  final int? id;
+  // final String? id;
   final String? title;
   final String? projectId;
   final String? projectName;
@@ -15,7 +15,7 @@ class ActivityEntity {
   final List<AssignedUserEntity>? assignedUsers;
 
   ActivityEntity({
-    this.id,
+    // this.id,
     this.title,
     this.projectId,
     this.projectName,
@@ -33,7 +33,7 @@ class ActivityEntity {
 
   factory ActivityEntity.fromJson(Map<String, dynamic> json) {
     return ActivityEntity(
-      id: json['id'] ?? 0,
+      // id: json['id'] ?? 0,
       title: json['title'] ?? '',
       projectId: json['project'] ?? '',
       projectName: json['project_name'] ?? '',
@@ -54,7 +54,7 @@ class ActivityEntity {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      // 'id': id,
       'title': title,
       'project': projectId,
       'project_name': projectName,

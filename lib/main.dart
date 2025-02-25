@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'Core/Config/Theme/app_colors.dart';
+import 'Data/Sources/Firebase/firebase_activity_remote_source.dart';
 import 'Presentation/Onboarding%20Page/Page/Onboarding_UI.dart';
 
 import 'Common/Bloc/bottom_navigation_with_swipe_cubit.dart';
@@ -47,16 +49,16 @@ class MyApp extends StatelessWidget {
 
   // Initialize the database and other dependencies
   Future<Widget> _initializeApp() async {
-
     print('Initializing');
     // Initialize the database
     final database = await DatabaseHelper.initializeDatabase();
 
     // Initialize the repositories
     final localDataSource = LocalDataSource(database);
-    final remoteDataSource = RemoteDataSource();
+    final remoteDataSource =
+        ActivityRemoteDataSource(firestore: FirebaseFirestore.instance);
     final taskRepository =
-    ActivityRepositoryImpl(remoteDataSource, localDataSource);
+        ActivityRepositoryImpl(remoteDataSource, localDataSource);
 
     // Initialize the use case
     final fetchTasksUseCase = ActivityUseCase(taskRepository);
@@ -100,7 +102,7 @@ class MyApp extends StatelessWidget {
               BlocProvider<ActivityBloc>(
                 create: (context) {
                   final fetchTasksUseCase =
-                  di.getIt<ActivityUseCase>(); // DI resolve here
+                      di.getIt<ActivityUseCase>(); // DI resolve here
                   final taskBloc = ActivityBloc(fetchTasksUseCase);
                   taskBloc.add(
                       LoadActivityEvent()); // Add the event right after Bloc initialization
@@ -136,7 +138,7 @@ class MyApp extends StatelessWidget {
               ),
               BlocProvider(
                 create: (context) =>
-                getIt<EmployeeBloc>()..add(FetchEmployeesEvent()),
+                    getIt<EmployeeBloc>()..add(FetchEmployeesEvent()),
               ),
               BlocProvider(
                 create: (context) => getIt<ProjectBloc>(),
@@ -154,7 +156,8 @@ class MyApp extends StatelessWidget {
                 create: (_) => getIt<VoucherBloc>()..add(FetchVouchersEvent()),
               ),
               BlocProvider(
-                create: (_) => getIt<DashboardBloc>()..add(LoadDashboardDataEvent()),
+                create: (_) =>
+                    getIt<DashboardBloc>()..add(LoadDashboardDataEvent()),
               ),
             ],
             child: snapshot.data!,

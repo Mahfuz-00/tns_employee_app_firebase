@@ -1,6 +1,7 @@
 import '../../Domain/Entities/profile_entities.dart';
 import '../../Domain/Repositories/profile_repositories.dart';
-import '../Sources/profile_remote_source.dart';
+import '../Sources/Firebase/firebase_profile_remote_source.dart';
+// import '../Sources/profile_remote_source.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {
   final ProfileRemoteSource remoteSource;

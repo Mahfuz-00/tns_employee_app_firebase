@@ -5,11 +5,12 @@ import 'package:sqflite/sqflite.dart';
 import '../../Domain/Repositories/activity_repositories.dart';
 import '../../Domain/Entities/activity_entities.dart';
 import '../Models/activity.dart';
+import '../Sources/Firebase/firebase_activity_remote_source.dart';
 import '../Sources/local_data_sources.dart';
-import '../Sources/remote_data_sources.dart';
+// import '../Sources/remote_data_sources.dart';
 
 class ActivityRepositoryImpl implements ActivityRepository {
-  final RemoteDataSource remoteDataSource;
+  final ActivityRemoteDataSource remoteDataSource;
   final LocalDataSource localDataSource;
 
   ActivityRepositoryImpl(this.remoteDataSource, this.localDataSource);
